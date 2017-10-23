@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Server.IISIntegration;
 
 namespace DemEntiaHRApplication
 {
@@ -36,7 +37,7 @@ namespace DemEntiaHRApplication
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
