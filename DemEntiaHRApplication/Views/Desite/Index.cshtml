@@ -1,23 +1,24 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
+
+@model UserViewModel
+
 <h1> Login </h1>
 
-<form asp-action="">
+<form asp-action="Index" method="post">
     <br />
     <table>
         <tr>
-            <td><label>Käyttäjänimi </label></td>
-            <td><input type="text" name="userName" /></td>
+            <td><label asp-for="UserName"></label></td>
+            <td><input asp-for="UserName" /></td>
         </tr>
         <tr>
-            <td><label>Salasana </label></td>
-            <td><input type="text" name="password" /></td>
+            <td><label asp-for="Password"></label></td>
+            <td><input asp-for="Password" /></td>
         </tr>
         <tr>
             <td><input type="submit" value="Kirjaudu" name="login" /></td>
         </tr>
-</table>
+    </table>
 </form>
