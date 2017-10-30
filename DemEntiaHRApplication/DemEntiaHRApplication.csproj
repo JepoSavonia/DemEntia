@@ -26,4 +26,8 @@
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Users\devjni\Desktop\test\AdManagementDemo-2017-10-01\AdManagementDemo\Savonia.AdManagement\Savonia.AdManagement.csproj" />
+  </ItemGroup>
+
 </Project>
