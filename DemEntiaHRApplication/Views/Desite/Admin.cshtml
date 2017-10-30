@@ -1,7 +1,50 @@
 ﻿
 @{
     ViewData["Title"] = "Admin";
+    List<string> users = new List<string>();
+
+    users.Add("Jepo");
+    users.Add("Hepo");
+    users.Add("Juqqa");
 }
 
 <h2>Admin</h2>
 
+<div class="mainCon">
+    <div class="searchCon">
+        <form asp-action="Admin" asp-controller="Desite" method="post">
+            <input type="text" name="seachUser"  /><!--asp-for=""-->
+            <input type="submit" value="Hae" />
+        </form>
+    </div>
+
+    <div class="adminAddUserCon">
+        <button id="adminAdduser">Lisää käyttäjä</button>  <!--Käyttäjän lisäys sivu avataan piilotetusta divistä popupiksi shadowin päälle-->
+    </div>
+
+    <div class="adminPanelCon">
+        <div class="adminTools">
+            <ul class="noList gridList">
+                <li>Käyttäjä</li>
+                <li>Enable/Disable</li>
+                <li>Muokkaa</li>
+                <li>Alusta salasana</li>
+            </ul>
+        </div> 
+        <!--Kannasta data loopataan täällä ja tulostetaan käyttäjät-->
+        @foreach (var item in users) 
+        {
+            <div id="@item" class="ADuser"><!--Käyttäjän id-->
+                <ul class="noList gridList">
+                    <li>@item</li>
+                    <li><button class="enableUserBtn">Enable</button><button class="disableUserBtn">Disable</button></li>
+                    <li><button class="editUserBtn">Muokkaa</button></li>
+                    <li><button class="resetPassBtn">Alusta salasana</button></li>
+                </ul>
+                              
+            </div>
+        }
+
+    </div>
+
+</div>
