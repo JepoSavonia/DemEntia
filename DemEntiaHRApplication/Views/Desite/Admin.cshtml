@@ -8,7 +8,7 @@
     users.Add("Juqqa");
 }
 
-<h2>Admin</h2>
+<h2>Ylläpitäjä</h2>
 
 <div class="mainCon">
     <div class="searchCon">
@@ -47,4 +47,22 @@
 
     </div>
 
+</div>
+
+<!--Shadow jonka päälle avataan popupit-->
+<div class="shadow hidden">
+</div>
+
+<div class="editUserPage hidden">
+    <button class="closeEditUserPage">Takaisin</button>
+    <form asp-action="Admin" asp-controller="Desite" method="post">
+        <!--näihin vielä asp-for jossain välis?-->
+        <label>Käyttäjä</label><input type="text" value="asd" name="ADusername" /><br />
+        <label>Salasana</label><input type="password" value="" name="ADpass" /><br />
+        <label>Nimi</label><input type="text" value="asd" name="ADname" /><br />
+        <label>Sähköposti</label><input type="email" value="asd@asd.com" name="ADemail" /><br />
+        <label>Näytettävä nimi</label><input type="text" value="asd" name="ADname" /><br />
+        <label>Osoite</label><input type="text" value="asd 123" name="ADaddress" /><br />
+        <input type="submit" value="Tallenna" />
+    </form>
 </div>

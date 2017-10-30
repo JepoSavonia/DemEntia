@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    height: 100%;
 }
 
 /* Wrapping element */
@@ -58,4 +59,32 @@
 }
 .disableUserBtn{
     background-color: orangered;
+}
+
+.shadow{
+    background-color: #000;
+    opacity: 0.5;
+    width: 100%;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 1;
+    height: 100%;
+}
+.editUserPage{
+    z-index: 2;
+    background-color: #FFFFFF;
+    width: 100%;
+    max-width: 800px;
+    position: fixed;
+    top: 20%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    min-height: 50%;
+    height: auto;
+}
+
+.editUserPage label{
+    width: 100px;
 }
