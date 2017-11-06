@@ -1,8 +1,24 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
-<h1> Hello world! </h1>
 
-<p>cODE MONKIES UNITE</p>
+@model UserViewModel
+
+<h1> Login </h1>
+
+<form asp-action="Index" method="post">
+    <br />
+    <table>
+        <tr>
+            <td><label asp-for="UserName"></label></td>
+            <td><input asp-for="UserName" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Password"></label></td>
+            <td><input asp-for="Password" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Kirjaudu" name="login" /></td>
+        </tr>
+    </table>
+</form>
