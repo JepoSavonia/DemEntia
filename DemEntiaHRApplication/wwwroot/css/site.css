@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    height: 100%;
 }
 
 /* Wrapping element */
@@ -32,4 +33,58 @@
     .carousel-caption {
         display: none;
     }
+}
+
+/*Oma CSS*/
+.noList {
+    list-style: none;
+    padding-left: 0;
+}
+.gridList {   
+    width: 100%;
+    text-align: center;
+    border-top: solid 1px black;
+}
+
+.gridList > li {
+    width: 100%;
+    max-width: 200px;
+    display: inline-block;
+    padding: 20px;
+    /*float: left;*/
+}
+
+.enableUserBtn{
+    background-color: greenyellow;
+}
+.disableUserBtn{
+    background-color: orangered;
+}
+
+.shadow{
+    background-color: #000;
+    opacity: 0.5;
+    width: 100%;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 1;
+    height: 100%;
+}
+.popUpPage{
+    z-index: 2;
+    background-color: #FFFFFF;
+    width: 100%;
+    max-width: 800px;
+    position: fixed;
+    top: 20%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    min-height: 50%;
+    height: auto;
+}
+
+.popUpPage label{
+    width: 150px;
 }
