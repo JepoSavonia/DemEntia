@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
+        <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +14,8 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.0" />
   </ItemGroup>
 
@@ -27,7 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AdManagementDemo\Savonia.AdManagement\Savonia.AdManagement.csproj" />
+    <Reference Include="Savonia.AdManagement">
+      <HintPath>..\..\..\..\Users\devjni\Desktop\test\AdManagementDemo-2017-10-01\AdManagementDemo\Savonia.AdManagement\bin\Debug\Savonia.AdManagement.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

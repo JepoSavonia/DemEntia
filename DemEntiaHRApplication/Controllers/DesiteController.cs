@@ -18,6 +18,7 @@ namespace DemEntiaHRApplication.Controllers
         [HttpPost]
         public IActionResult Index(UserViewModel user)
         {
+            
             BetterAdManager adManager = new BetterAdManager(new AccountManagementConfig { Domain = "ALUENIMI3.LOCAL", Container = "OU=Users,OU=DE,DC=ALUENIMI3,DC=LOCAL", Username = user.UserName, Password = user.Password });
 
             SavoniaUserObject userObject = adManager.FindUser(user.UserName);
