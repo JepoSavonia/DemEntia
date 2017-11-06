@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="bower.json" />
+    <Content Remove="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Properties\PublishProfiles\CustomProfile.pubxml" />
   </ItemGroup>
 
@@ -28,7 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AdManagementDemo\Savonia.AdManagement\Savonia.AdManagement.csproj" />
+    <None Include="bower.json" />
+    <None Include="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AdManagementDemo\Savonia.AdManagement\Savonia.AdManagement.csproj" />
   </ItemGroup>
 
 </Project>

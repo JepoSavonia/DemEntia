@@ -21,33 +21,35 @@ namespace DemEntiaHRApplication.Controllers
             
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Index(UserViewModel user)
+        /*[HttpPost]
+        public IActionResult Index()
         {
             BetterAdManager adManager = new BetterAdManager(AccountManagementConfig);
             
             SavoniaUserObject userObject = adManager.FindUser(user.UserName);
 
-            return View(user);
-        }
+            return View();
+        }*/
 
+        [Authorize(Roles ="Aluenimi3.local\\UG_Admin")]
         public IActionResult Admin()
         {
             return View();
         }
 
+        [Authorize(Roles = "Aluenimi3.local\\UG_Employee")]
         public IActionResult ADUser()
         {
             return View();
         }
 
+        [Authorize(Roles = "Aluenimi3.local\\UG_HR")]
         public IActionResult HRUser()
         {
             return View();

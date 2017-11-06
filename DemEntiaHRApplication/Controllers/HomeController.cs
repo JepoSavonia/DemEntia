@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DemEntiaHRApplication.Models;
 
+
 namespace DemEntiaHRApplication.Controllers
 {
     public class HomeController : Controller
