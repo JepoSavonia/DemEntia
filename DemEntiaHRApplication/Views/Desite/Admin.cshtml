@@ -19,7 +19,7 @@
     </div>
 
     <div class="adminAddUserCon">
-        <button id="adminAdduser">Lisää käyttäjä</button>  <!--Käyttäjän lisäys sivu avataan piilotetusta divistä popupiksi shadowin päälle-->
+        <button class="adminAddUserBtn">Lisää käyttäjä</button>  <!--Käyttäjän lisäys sivu avataan piilotetusta divistä popupiksi shadowin päälle-->
     </div>
 
     <div class="adminPanelCon">
@@ -53,16 +53,42 @@
 <div class="shadow hidden">
 </div>
 
-<div class="editUserPage hidden">
-    <button class="closeEditUserPage">Takaisin</button>
+<div class="editUserPage hidden popUpPage">
+    <button class="closePopUp">Takaisin</button>
     <form asp-action="Admin" asp-controller="Desite" method="post">
         <!--näihin vielä asp-for jossain välis?-->
         <label>Käyttäjä</label><input type="text" value="asd" name="ADusername" /><br />
-        <label>Salasana</label><input type="password" value="" name="ADpass" /><br />
+        <!--<label>Salasana</label><input type="password" value="" name="ADpass" /><br />-->
         <label>Nimi</label><input type="text" value="asd" name="ADname" /><br />
         <label>Sähköposti</label><input type="email" value="asd@asd.com" name="ADemail" /><br />
         <label>Näytettävä nimi</label><input type="text" value="asd" name="ADname" /><br />
         <label>Osoite</label><input type="text" value="asd 123" name="ADaddress" /><br />
-        <input type="submit" value="Tallenna" />
+        <input type="submit" name="editSubmit" value="Tallenna" />
+    </form>
+</div>
+
+<div class="addUserPage hidden popUpPage">
+    <button class="closePopUp">Takaisin</button>
+    <form asp-action="Admin" asp-controller="Desite" method="post">
+        <!--näihin vielä asp-for jossain välis?-->
+        <label>Käyttäjä</label><input type="text" name="ADusername" /><br />
+        <label>Salasana</label><input type="password" value="" name="ADpass" /><br />
+        <label>Salasana</label><input type="password" value="" name="ADpass2" /><br />
+        <label>Nimi</label><input type="text" name="ADname" /><br />
+        <label>Sähköposti</label><input type="email" name="ADemail" /><br />
+        <label>Näytettävä nimi</label><input type="text" name="ADname" /><br />
+        <label>Osoite</label><input type="text" name="ADaddress" /><br />
+        <input type="submit" name="addSubmit" value="Lisää käyttäjä" />
+    </form>
+</div>
+
+
+<div class="resetPassPage hidden popUpPage">
+    <button class="closePopUp">Takaisin</button>
+    <form asp-action="Admin" asp-controller="Desite" method="post">
+        <!--näihin vielä asp-for jossain välis?-->       
+        <label>Salasana</label><input type="password" value="" name="ADpass" /><br />
+        <label>Salasana uudelleen</label><input type="password" value="" name="ADpass2" /><br />
+        <input type="submit" value="Aseta salasana" />
     </form>
 </div>

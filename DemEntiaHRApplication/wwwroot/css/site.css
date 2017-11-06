@@ -71,7 +71,7 @@
     z-index: 1;
     height: 100%;
 }
-.editUserPage{
+.popUpPage{
     z-index: 2;
     background-color: #FFFFFF;
     width: 100%;
@@ -85,6 +85,6 @@
     height: auto;
 }
 
-.editUserPage label{
-    width: 100px;
+.popUpPage label{
+    width: 150px;
 }
