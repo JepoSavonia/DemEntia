@@ -2,23 +2,32 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model UserViewModel
-
 <h1> Login </h1>
 
-<form asp-action="Index" method="post">
+<form asp-action="Admin" method="get">
     <br />
-    <table>
+    <!--<table>
         <tr>
             <td><label asp-for="UserName"></label></td>
-            <td><input asp-for="UserName" /></td>
-        </tr>
+            <td><input asp-for="UserName" /></td>-->
+            <input type="submit" name="admin" value="Admin"/>
+        <!--</tr>
         <tr>
             <td><label asp-for="Password"></label></td>
             <td><input asp-for="Password" /></td>
+            <td><input type="submit" name="hruser" value="HR-User" /></td>
         </tr>
         <tr>
             <td><input type="submit" value="Kirjaudu" name="login" /></td>
+            <td><input type="submit" name="aduser" value="AD-User" /></td>
         </tr>
-    </table>
+    </table>-->
+</form>
+
+<form asp-action="HRUser">
+    <input type="submit" name="hruser" value="HR-User" />
+</form>
+
+<form asp-action="ADUser">
+    <input type="submit" name="aduser" value="AD-User" />
 </form>

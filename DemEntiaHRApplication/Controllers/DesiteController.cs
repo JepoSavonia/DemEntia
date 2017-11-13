@@ -22,15 +22,15 @@ namespace DemEntiaHRApplication.Controllers
             
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Index(UserViewModel user)
+        [HttpGet]
+        [Authorize(Roles ="Aluenimi3.local\\UG_Admin")]
+        public IActionResult Admin()
         {
             BetterAdManager adManager = new BetterAdManager(AccountManagementConfig);
             
@@ -53,11 +53,13 @@ namespace DemEntiaHRApplication.Controllers
             return View(a);
         }
 
+        [Authorize(Roles = "Aluenimi3.local\\UG_Employee")]
         public IActionResult ADUser()
         {
             return View();
         }
 
+        [Authorize(Roles = "Aluenimi3.local\\UG_HR")]
         public IActionResult HRUser()
         {
             return View();
