@@ -3,31 +3,15 @@
 *@
 
 <h1> Login </h1>
-
+<br />
 <form asp-action="Admin" method="get">
-    <br />
-    <!--<table>
-        <tr>
-            <td><label asp-for="UserName"></label></td>
-            <td><input asp-for="UserName" /></td>-->
-            <input type="submit" name="admin" value="Admin"/>
-        <!--</tr>
-        <tr>
-            <td><label asp-for="Password"></label></td>
-            <td><input asp-for="Password" /></td>
-            <td><input type="submit" name="hruser" value="HR-User" /></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="Kirjaudu" name="login" /></td>
-            <td><input type="submit" name="aduser" value="AD-User" /></td>
-        </tr>
-    </table>-->
+    <input type="submit" name="admin" value="Admin"/>
 </form>
-
-<form asp-action="HRUser">
+<br />
+<form asp-action="HRUser" method="get">
     <input type="submit" name="hruser" value="HR-User" />
 </form>
-
-<form asp-action="ADUser">
+<br />
+<form asp-action="ADUser" method="get">
     <input type="submit" name="aduser" value="AD-User" />
 </form>

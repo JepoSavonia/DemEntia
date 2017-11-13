@@ -1,7 +1,45 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "ADUser";
 }
 
-<h2>ADUser</h2>
+@using Savonia.AdManagement
 
+@model SavoniaUserObject
+
+<h2>ADUser</h2>
+<br />
+<h4>@ViewData["message"]</h4>
+<br />
+<form asp-action="ADUser" method="post">
+
+    <table>
+        <tr>
+            <td><label asp-for="Name"></label></td>
+            <td><input asp-for="Name" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Surname"></label></td>
+            <td><input asp-for="Surname" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Email"></label></td>
+            <td><input asp-for="Email" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="DisplayName"></label></td>
+            <td><input asp-for="DisplayName" /></td>
+        </tr>
+        <!--<tr>
+            <td><label asp-for="Address"></label></td>
+            <td><input asp-for="Address" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Nimi"></label></td>
+            <td><input asp-for="Nimi" /></td>
+        </tr>-->
+        <tr>
+            <td><input type="submit" name="save" value="tallenna" /></td>
+        </tr>
+
+    </table>
+</form>
