@@ -8,6 +8,7 @@
     users.Add("Juqqa");
 }
 
+@model Savonia.AdManagement.SavoniaUserObject
 <h2>Ylläpitäjä</h2>
 
 <div class="mainCon">
@@ -37,7 +38,19 @@
             <div id="@item" class="ADuser"><!--Käyttäjän id-->
                 <ul class="noList gridList">
                     <li>@item</li>
-                    <li><button class="enableUserBtn">Enable</button><button class="disableUserBtn">Disable</button></li>
+                    <li>
+                        @if (Model.IsEnabled)
+                        {
+                            <label>Enabled</label>
+                            <button class="disableUserBtn">Disable</button>
+                        }
+                        else
+                        {                   
+                            <button class="enableUserBtn">Enable</button>
+                            <label>Disabled</label>
+                        }
+                    
+                    </li>
                     <li><button class="editUserBtn">Muokkaa</button></li>
                     <li><button class="resetPassBtn">Alusta salasana</button></li>
                 </ul>
@@ -57,12 +70,12 @@
     <button class="closePopUp">Takaisin</button>
     <form asp-action="Admin" asp-controller="Desite" method="post">
         <!--näihin vielä asp-for jossain välis?-->
-        <label>Käyttäjä</label><input type="text" value="asd" name="ADusername" /><br />
-        <!--<label>Salasana</label><input type="password" value="" name="ADpass" /><br />-->
-        <label>Nimi</label><input type="text" value="asd" name="ADname" /><br />
-        <label>Sähköposti</label><input type="email" value="asd@asd.com" name="ADemail" /><br />
-        <label>Näytettävä nimi</label><input type="text" value="asd" name="ADname" /><br />
-        <label>Osoite</label><input type="text" value="asd 123" name="ADaddress" /><br />
+        <label>Käyttäjä</label><input type="text" asp-for="Username" /><br />
+        <!--<label>Salasana</label><input type="password" value="" name="ADpass" /><br />
+        <label>Nimi</label><input type="text" value="asd" asp-for="" name="ADname" /><br />-->
+        <label>Sähköposti</label><input type="email" asp-for="Email"/><br />
+        <label>Näytettävä nimi</label><input type="text" asp-for="DisplayName" /><br />
+        <label>Osoite</label><input type="text" asp-for="Path"/><br />
         <input type="submit" name="editSubmit" value="Tallenna" />
     </form>
 </div>

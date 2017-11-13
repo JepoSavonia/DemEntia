@@ -8,6 +8,7 @@ using Savonia.AdManagement;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+//using Savonia.AdManagement;
 
 namespace DemEntiaHRApplication.Controllers
 {
@@ -40,7 +41,16 @@ namespace DemEntiaHRApplication.Controllers
 
         public IActionResult Admin()
         {
-            return View();
+            SavoniaUserObject a = new SavoniaUserObject {
+                DisplayName = "Jepo",
+                Email = "asd@asd.com",
+                IsEnabled = true,
+                Title ="Hepo",
+                Username = "jepoUser",
+                Dn = "asd",
+                Path = "pathasd123"};
+            
+            return View(a);
         }
 
         public IActionResult ADUser()
