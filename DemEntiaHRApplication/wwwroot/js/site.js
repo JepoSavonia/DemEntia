@@ -24,4 +24,7 @@ $(document).ready(function () {
         $(".visiblePopUp").addClass("hidden");
         $(".visiblePopUp").removeClass("visiblePopUp");
     });
+
+
+    if($)
 });

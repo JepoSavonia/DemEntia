@@ -8,6 +8,7 @@ using Savonia.AdManagement;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+//using Savonia.AdManagement;
 
 namespace DemEntiaHRApplication.Controllers
 {
@@ -32,13 +33,31 @@ namespace DemEntiaHRApplication.Controllers
         [Authorize(Roles ="Aluenimi3.local\\UG_Admin")]
         public IActionResult Admin()
         {
+            BetterAdManager adManager = new BetterAdManager(AccountManagementConfig);
+            
+            SavoniaUserObject userObject = adManager.FindUser(user.UserName);
+
+            return View(user);
+        }
+
+        public IActionResult Admin()
+        {
+            SavoniaUserObject a = new SavoniaUserObject {
+                DisplayName = "Jepo",
+                Email = "asd@asd.com",
+                IsEnabled = true,
+                Title ="Hepo",
+                Username = "jepoUser",
+                Dn = "asd",
+                Path = "pathasd123"};
+            
             SavoniaUserObject userObject = new SavoniaUserObject();
 
             String userName = User.Identity.Name.Replace("ALUENIMI3\\","");
 
             userObject = adManager.FindUser(userName);
 
-            return View();
+            return View(a);
         }
 
         [HttpGet]
