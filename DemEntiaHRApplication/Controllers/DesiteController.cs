@@ -27,19 +27,11 @@ namespace DemEntiaHRApplication.Controllers
             return View();
         }
 
-        /*[HttpPost]
-        public IActionResult Index()
-        {
-            BetterAdManager adManager = new BetterAdManager(AccountManagementConfig);
-            
-            SavoniaUserObject userObject = adManager.FindUser(user.UserName);
-
-            return View();
-        }*/
-
+        [HttpGet]
         [Authorize(Roles ="Aluenimi3.local\\UG_Admin")]
         public IActionResult Admin()
         {
+            
             return View();
         }
 
