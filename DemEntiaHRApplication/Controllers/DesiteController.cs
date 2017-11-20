@@ -35,12 +35,12 @@ namespace DemEntiaHRApplication.Controllers
         {
             BetterAdManager adManager = new BetterAdManager(AccountManagementConfig);
             
-            SavoniaUserObject userObject = adManager.FindUser(user.UserName);
+            //SavoniaUserObject userObject = adManager.FindUser(user.UserName);
 
-            return View(user);
+            return View(/*user*/);
         }
 
-        public IActionResult Admin()
+        /*public IActionResult Admin()
         {
             SavoniaUserObject a = new SavoniaUserObject {
                 DisplayName = "Jepo",
@@ -58,7 +58,7 @@ namespace DemEntiaHRApplication.Controllers
             userObject = adManager.FindUser(userName);
 
             return View(a);
-        }
+        }*/
 
         [HttpGet]
         [Authorize(Roles = "Aluenimi3.local\\UG_Employee")]
