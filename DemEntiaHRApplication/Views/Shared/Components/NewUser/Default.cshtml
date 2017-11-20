@@ -1,0 +1,38 @@
+﻿@model Savonia.AdManagement.SavoniaUserObject
+
+<form asp-action="Admin" method="post">
+    <table>
+        <tr>
+            <td><label asp-for="Username"></label></td>
+            <td><input asp-for="Username" /></td>
+        </tr>
+
+        <tr>
+            <td><label asp-for="Name"></label></td>
+            <td><input asp-for="Name" /></td>
+        </tr>
+
+        <tr>
+            <td><label asp-for="Surname"></label></td>
+            <td><input asp-for="Surname" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Email"></label></td>
+            <td><input asp-for="Email" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="IsEnabled"></label></td>
+            <td><input asp-for="IsEnabled" /></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Password"></label></td>
+            <td><input asp-for="Password" type="password" /></td>
+        </tr>
+
+    </table>
+
+    <br />
+
+    <input type="submit" name="createUser" value="Lisää käyttäjä" />
+
+</form>

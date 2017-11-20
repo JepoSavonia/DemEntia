@@ -28,37 +28,52 @@ namespace DemEntiaHRApplication.Controllers
             
             return View();
         }
-
         [HttpGet]
         [Authorize(Roles ="Aluenimi3.local\\UG_Admin")]
-        public IActionResult Admin()
+        public IActionResult Admin(string username)
         {
-            BetterAdManager adManager = new BetterAdManager(AccountManagementConfig);
+            String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
+            ViewData["message"] = "Tervetuloa " + adminUser;
+            if (username != null)
+            {
+                SavoniaUserObject userObject = new SavoniaUserObject();
+                userObject = adManager.FindUser(username);
+                /*var names = userObject.DisplayName.Split(' ');
+                userObject.Name = names[0];
+                userObject.Surname = names[1];*/
+                return View(userObject);
+            }
             
-            //SavoniaUserObject userObject = adManager.FindUser(user.UserName);
 
-            return View(/*user*/);
+            return View();
         }
 
-        /*public IActionResult Admin()
+        [HttpPost]
+        [Authorize(Roles = "Aluenimi3.local\\UG_Admin")]
+        public IActionResult Admin(SavoniaUserObject userObject, string update, string createUser)
         {
-            SavoniaUserObject a = new SavoniaUserObject {
-                DisplayName = "Jepo",
-                Email = "asd@asd.com",
-                IsEnabled = true,
-                Title ="Hepo",
-                Username = "jepoUser",
-                Dn = "asd",
-                Path = "pathasd123"};
+
+            if (update != null)
+            {
+                adManager.UpdateUser(userObject);
+                ViewData["message"] = "käyttäjä " + userObject.Username + " päivitetty!";
+            }
+            else if (createUser != null)
+            {
+                adManager.AddUser(userObject);
+
+                ViewData["message"] = "käyttäjä " + userObject.Username + " lisätty!";
+
+                return View();
+            }
             
-            SavoniaUserObject userObject = new SavoniaUserObject();
+            return View(userObject);
+        }
 
-            String userName = User.Identity.Name.Replace("ALUENIMI3\\","");
-
-            userObject = adManager.FindUser(userName);
-
-            return View(a);
-        }*/
+        public IActionResult AddUser()
+        {
+            return ViewComponent("NewUser");
+        }
 
         [HttpGet]
         [Authorize(Roles = "Aluenimi3.local\\UG_Employee")]
@@ -77,8 +92,6 @@ namespace DemEntiaHRApplication.Controllers
         public IActionResult ADUser(SavoniaUserObject userObject)
         {
             userObject.Username = User.Identity.Name.Replace("ALUENIMI3\\", "");
-            var booli = User.Identity.IsAuthenticated;
-            var booli2 = User.Identity.IsAuthenticated;
             adManager.UpdateUser(userObject);
             ViewData["message"] = "Käyttäjän tiedot päivitetty";
             return View(userObject);

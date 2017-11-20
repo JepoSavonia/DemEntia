@@ -1,29 +1,151 @@
-﻿
+﻿<style>
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+
 @{
     ViewData["Title"] = "Admin";
-    List<string> users = new List<string>();
-
-    users.Add("Jepo");
-    users.Add("Hepo");
-    users.Add("Juqqa");
 }
 
 @model Savonia.AdManagement.SavoniaUserObject
 <h2>Ylläpitäjä</h2>
 
-<div class="mainCon">
+<!--<div class="mainCon">-->
+    <br />
+    <p>@ViewData["message"]</p>
+    <br />
+    <div class="adminAddUserCon">
+        <button id="addUserBtn" type="button" class="adminAddUserBtn" >Lisää käyttäjä</button>
+    </div>
+    <br />
     <div class="searchCon">
-        <form asp-action="Admin" asp-controller="Desite" method="post">
-            <input type="text" name="seachUser"  /><!--asp-for=""-->
+        <form asp-action="Admin" method="get">
+
+            <input type="text" name="username" placeholder="Username" />
             <input type="submit" value="Hae" />
+            <br />
+        </form>
+        <br />
+        <form asp-action="Admin" method="post">
+            <table>
+                <tr>
+                    <td><label asp-for="Username"></label></td>
+                    <td><input asp-for="Username" /></td>
+                </tr>
+
+                <tr>
+                    <td><label asp-for="Name"></label></td>
+                    <td><input asp-for="Name" /></td>
+                </tr>
+
+                <tr>
+                    <td><label asp-for="Surname"></label></td>
+                    <td><input asp-for="Surname" /></td>
+                </tr>
+                <tr>
+                    <td><label asp-for="Email"></label></td>
+                    <td><input asp-for="Email" /></td>
+                </tr>
+                <tr>
+                    <td><label asp-for="IsEnabled"></label></td>
+                    <td><input asp-for="IsEnabled" /></td>
+                </tr>
+
+            </table>
+
+            <br />
+
+            <input type="submit" name="update" value="Päivitä" />
+
         </form>
     </div>
+    
+    <div id="myModal" class="modal">
 
-    <div class="adminAddUserCon">
-        <button class="adminAddUserBtn">Lisää käyttäjä</button>  <!--Käyttäjän lisäys sivu avataan piilotetusta divistä popupiksi shadowin päälle-->
+    <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            
+            <h3>Lisää uusi käyttäjä</h3>
+            <br />
+            <div id="createUser">
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="adminPanelCon">
+@section scripts{
+    <script>
+
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("addUserBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+
+            $("#createUser").load("/Desite/Desite/AddUser");
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+}
+
+    @*<div class="adminPanelCon">
         <div class="adminTools">
             <ul class="noList gridList">
                 <li>Käyttäjä</li>
@@ -33,34 +155,33 @@
             </ul>
         </div> 
         <!--Kannasta data loopataan täällä ja tulostetaan käyttäjät-->
-        @foreach (var item in users) 
-        {
-            <div id="@item" class="ADuser"><!--Käyttäjän id-->
-                <ul class="noList gridList">
-                    <li>@item</li>
-                    <li>
-                        @if (Model.IsEnabled)
-                        {
-                            <label>Enabled</label>
-                            <button class="disableUserBtn">Disable</button>
-                        }
-                        else
-                        {                   
-                            <button class="enableUserBtn">Enable</button>
-                            <label>Disabled</label>
-                        }
-                    
-                    </li>
-                    <li><button class="editUserBtn">Muokkaa</button></li>
-                    <li><button class="resetPassBtn">Alusta salasana</button></li>
-                </ul>
-                              
-            </div>
-        }
 
-    </div>
+        <div id="@item" class="ADuser"><!--Käyttäjän id-->
+            <ul class="noList gridList">
+                <li>@item</li>
+                <li>
+                    @if (Model.IsEnabled)
+                    {
+                        <label>Enabled</label>
+                        <button class="disableUserBtn">Disable</button>
+                    }
+                    else
+                    {
+                        <button class="enableUserBtn">Enable</button>
+                        <label>Disabled</label>
+                    }
 
-</div>
+                </li>
+                <li><button class="editUserBtn">Muokkaa</button></li>
+                <li><button class="resetPassBtn">Alusta salasana</button></li>
+            </ul>
+
+        </div>
+    
+
+    </div>*@
+
+@*</div>
 
 <!--Shadow jonka päälle avataan popupit-->
 <div class="shadow hidden">
@@ -104,4 +225,4 @@
         <label>Salasana uudelleen</label><input type="password" value="" name="ADpass2" /><br />
         <input type="submit" value="Aseta salasana" />
     </form>
-</div>
+</div>*@
