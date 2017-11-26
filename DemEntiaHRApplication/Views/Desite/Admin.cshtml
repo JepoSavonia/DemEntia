@@ -58,42 +58,62 @@
         <form asp-action="Admin" method="get">
 
             <input type="text" name="username" placeholder="Username" />
-            <input type="submit" value="Hae" />
+            <input id="searchButton" type="submit" value="Hae" />
             <br />
         </form>
         <br />
-        <form asp-action="Admin" method="post">
-            <table>
-                <tr>
-                    <td><label asp-for="Username"></label></td>
-                    <td><input asp-for="Username" /></td>
-                </tr>
+        <div id="resultDiv" style="display: @ViewData["display"];">
+            <form asp-action="Admin" method="post">
+                <table>
+                    <tr>
+                        <td><label asp-for="Username"></label></td>
+                        <td><input asp-for="Username" /></td>
+                    </tr>
 
-                <tr>
-                    <td><label asp-for="Name"></label></td>
-                    <td><input asp-for="Name" /></td>
-                </tr>
+                    <tr>
+                        <td><label asp-for="Name"></label></td>
+                        <td><input asp-for="Name" /></td>
+                    </tr>
 
-                <tr>
-                    <td><label asp-for="Surname"></label></td>
-                    <td><input asp-for="Surname" /></td>
-                </tr>
-                <tr>
-                    <td><label asp-for="Email"></label></td>
-                    <td><input asp-for="Email" /></td>
-                </tr>
-                <tr>
-                    <td><label asp-for="IsEnabled"></label></td>
-                    <td><input asp-for="IsEnabled" /></td>
-                </tr>
+                    <tr>
+                        <td><label asp-for="Surname"></label></td>
+                        <td><input asp-for="Surname" /></td>
+                    </tr>
+                    <tr>
+                        <td><label asp-for="Email"></label></td>
+                        <td><input asp-for="Email" /></td>
+                    </tr>
+                    <tr>
+                        <td><label asp-for="IsEnabled"></label></td>
+                        <td><input asp-for="IsEnabled" /></td>
+                    </tr>
 
-            </table>
-
+                </table>
+                <input type="submit" name="update" value="Päivitä" />
+            </form>
             <br />
 
-            <input type="submit" name="update" value="Päivitä" />
+            <p>@ViewData["updateMessage"]</p>
 
-        </form>
+            <br />
+            <form asp-action="ResetPass" method="post">
+                <table>
+                    <tr>
+                        <td><label>Nollaa salasana</label></td>
+                        <td><input asp-for="Password" type="password" placeholder="Uusi salasana" /></td>
+                    </tr>
+                </table>
+                <input asp-for="Username" type="hidden" />
+                <input asp-for="Name" type="hidden" />
+                <input asp-for="Surname" type="hidden" />
+                <input asp-for="Email" type="hidden" />
+                <input asp-for="IsEnabled" type="hidden" />
+                <input type="submit" name="resetPass" value="Tallenna" />
+            </form>
+            <br />
+            <p>@ViewData["resetPassMessage"]</p>
+
+        </div>
     </div>
     
     <div id="myModal" class="modal">

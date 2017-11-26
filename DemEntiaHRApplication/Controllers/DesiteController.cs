@@ -25,7 +25,6 @@ namespace DemEntiaHRApplication.Controllers
 
         public IActionResult Index()
         {
-            
             return View();
         }
         [HttpGet]
@@ -38,13 +37,10 @@ namespace DemEntiaHRApplication.Controllers
             {
                 SavoniaUserObject userObject = new SavoniaUserObject();
                 userObject = adManager.FindUser(username);
-                /*var names = userObject.DisplayName.Split(' ');
-                userObject.Name = names[0];
-                userObject.Surname = names[1];*/
+                ViewData["display"] = "block";
                 return View(userObject);
             }
-            
-
+            ViewData["display"] = "none";
             return View();
         }
 
@@ -52,15 +48,16 @@ namespace DemEntiaHRApplication.Controllers
         [Authorize(Roles = "Aluenimi3.local\\UG_Admin")]
         public IActionResult Admin(SavoniaUserObject userObject, string update, string createUser)
         {
-
+            ViewData["display"] = "block";
             if (update != null)
             {
                 adManager.UpdateUser(userObject);
-                ViewData["message"] = "käyttäjä " + userObject.Username + " päivitetty!";
+                ViewData["updateMessage"] = "käyttäjä " + userObject.Username + " päivitetty!";
             }
             else if (createUser != null)
             {
                 adManager.AddUser(userObject);
+                adManager.AddUserToGroup(userObject.Username, "UG_Employee");
 
                 ViewData["message"] = "käyttäjä " + userObject.Username + " lisätty!";
 
@@ -73,6 +70,14 @@ namespace DemEntiaHRApplication.Controllers
         public IActionResult AddUser()
         {
             return ViewComponent("NewUser");
+        }
+
+        public IActionResult ResetPass(SavoniaUserObject userObject)
+        {
+            adManager.ResetPassword(userObject.Username, userObject.Password);
+            ViewData["resetPassMessage"] = "Käyttäjän " + userObject.Username + " salasana vaihdettu!";
+            userObject.Password = "";
+            return View("Admin", userObject);
         }
 
         [HttpGet]
@@ -93,7 +98,7 @@ namespace DemEntiaHRApplication.Controllers
         {
             userObject.Username = User.Identity.Name.Replace("ALUENIMI3\\", "");
             adManager.UpdateUser(userObject);
-            ViewData["message"] = "Käyttäjän tiedot päivitetty";
+            ViewData["message"] = "Käyttäjän " + userObject.Username + " tiedot päivitetty";
             return View(userObject);
         }
 
