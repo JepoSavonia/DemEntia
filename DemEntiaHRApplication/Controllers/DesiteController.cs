@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using DemEntiaHRApplication.Models;
 using Savonia.AdManagement;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-//using Savonia.AdManagement;
+using CsvHelper;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using DemEntiaHRApplication.Models;
+using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web;
+using Newtonsoft.Json;
 
 namespace DemEntiaHRApplication.Controllers
 {
@@ -37,7 +40,15 @@ namespace DemEntiaHRApplication.Controllers
             {
                 SavoniaUserObject userObject = new SavoniaUserObject();
                 userObject = adManager.FindUser(username);
-                ViewData["display"] = "block";
+                if (userObject != null)
+                {
+                    ViewData["display"] = "block";
+                }
+                else
+                {
+                    ViewData["userNotFound"] = "Käyttäjää ei löytynyt!";
+                    ViewData["display"] = "none";
+                }
                 return View(userObject);
             }
             ViewData["display"] = "none";
@@ -102,15 +113,49 @@ namespace DemEntiaHRApplication.Controllers
             return View(userObject);
         }
 
+        [HttpPost]
+        public IActionResult PostFile(IFormFile postedFile)
+        {
+
+            List<SavoniaUserObject> results = new List<SavoniaUserObject>();
+
+            var reader = new StreamReader(postedFile.OpenReadStream());
+
+            reader.ReadLine();
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(';');
+
+                results.Add(new SavoniaUserObject {Name = values[0], Surname=values[1], Username=values[2], Email=values[3], Password=values[4], IsEnabled=Boolean.Parse(values[5]) });
+            }
+
+            return View("HRUser", new UserModel { UserList = results });
+        }
+
         [Authorize(Roles = "Aluenimi3.local\\UG_HR")]
         public IActionResult HRUser()
         {
             SavoniaUserObject userObject = new SavoniaUserObject();
             String userName = User.Identity.Name.Replace("ALUENIMI3\\", "");
             userObject = adManager.FindUser(userName);
+
             return View();
         }
 
-        
+        public IActionResult SaveUsers(string userArray)
+        {
+           
+            List<SavoniaUserObject> userList = JsonConvert.DeserializeObject<List<SavoniaUserObject>>(userArray);
+
+            foreach (var user in userList)
+            {
+                adManager.AddUser(user);
+                adManager.AddUserToGroup(user.Username, "UG_Employee");
+            }
+
+            return Json(new { success = true, responseText = "Käyttäjät lisätty!" });
+        }
+
     }
 }

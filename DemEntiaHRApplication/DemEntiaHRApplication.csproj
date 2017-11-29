@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />-->
+    <PackageReference Include="CsvHelper" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
@@ -38,7 +39,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AdManagementDemo\Savonia.AdManagement\Savonia.AdManagement.csproj" />
+    <ProjectReference Include="..\..\..\..\Users\devnsn\Downloads\AdManagement-adManagement\AdManagement-adManagement\Savonia.AdManagement\Savonia.AdManagement.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
   </ItemGroup>
 
 </Project>

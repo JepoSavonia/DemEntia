@@ -2,5 +2,114 @@
 @{
     ViewData["Title"] = "HRUser";
 }
-
+@model UserModel
 <h2>HRUser</h2>
+
+<form method="post" enctype="multipart/form-data" asp-action="PostFile">
+
+    <input id="uploadFile" placeholder="Valitse tiedosto" disabled="disabled" />
+
+    <button class="upload" type="button" onclick="document.getElementById('uploadBtn').click();">Hae</button>
+
+    <input id="uploadBtn" type="file" name="postedFile" style="visibility:hidden;" />
+
+    <input type="submit" value="Lataa tiedosto" />
+
+</form>
+
+@if (Model != null)
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.User.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.User.Surname)</th>
+                    <th>@Html.DisplayNameFor(model => model.User.Username)</th>
+                    <th>@Html.DisplayNameFor(model => model.User.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.User.Password)</th>
+                    <th>@Html.DisplayNameFor(model => model.User.IsEnabled)</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var user in Model.UserList)
+                {
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(x => user.Name)
+                            @Html.DisplayFor(modelItem => user.Name)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(x => user.Surname)
+                            @Html.DisplayFor(modelItem => user.Surname)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(x => user.Username)
+                            @Html.DisplayFor(modelItem => user.Username)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(x => user.Email)
+                            @Html.DisplayFor(modelItem => user.Email)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(x => user.Password)
+                            @Html.DisplayFor(modelItem => user.Password)
+                        </td>
+                        <td>
+                            @Html.HiddenFor(x => user.IsEnabled)
+                            @Html.DisplayFor(modelItem => user.IsEnabled)
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <button name="saveUsers" onclick="saveUsers()">Tallenna käyttäjät</button>
+}
+
+@{
+    var json1 = Json.Serialize("{}");
+
+    if (Model != null)
+    {
+        json1 = Json.Serialize(Model.UserList);
+    }
+}
+
+@section scripts{
+
+<script>
+
+    function saveUsers() {
+
+        
+        var userArray = @Html.Raw(json1);
+
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                url: '/Desite/Desite/SaveUsers',
+                data: { userArray: JSON.stringify(userArray) },
+                success: function (result) {
+                    alert(result.responseText);
+                },
+                error: function (result) {
+                    alert("Virhe käyttäjien lisäämisessä!"); 
+                }
+            });
+        
+    };
+
+    document.getElementById("uploadBtn").onchange = function () {
+        var startIndex = (this.value.indexOf('\\') >= 0 ? this.value.lastIndexOf('\\') : this.value.lastIndexOf('/'));
+        var filename = this.value.substring(startIndex);
+        if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+            filename = filename.substring(1);
+        }
+        document.getElementById("uploadFile").value = filename;
+    };
+
+</script>
+
+}

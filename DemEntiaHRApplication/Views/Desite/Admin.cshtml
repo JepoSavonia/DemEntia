@@ -46,7 +46,6 @@
 @model Savonia.AdManagement.SavoniaUserObject
 <h2>Ylläpitäjä</h2>
 
-<!--<div class="mainCon">-->
     <br />
     <p>@ViewData["message"]</p>
     <br />
@@ -61,31 +60,32 @@
             <input id="searchButton" type="submit" value="Hae" />
             <br />
         </form>
+        <p style="color:red">@ViewData["userNotFound"]</p>
         <br />
         <div id="resultDiv" style="display: @ViewData["display"];">
             <form asp-action="Admin" method="post">
                 <table>
                     <tr>
                         <td><label asp-for="Username"></label></td>
-                        <td><input asp-for="Username" /></td>
+                        <td><input asp-for="Username" disabled="disabled"/><input asp-for="Username" type="hidden" /></td>
                     </tr>
 
                     <tr>
                         <td><label asp-for="Name"></label></td>
-                        <td><input asp-for="Name" /></td>
+                        <td><input asp-for="Name" required/></td>
                     </tr>
 
                     <tr>
                         <td><label asp-for="Surname"></label></td>
-                        <td><input asp-for="Surname" /></td>
+                        <td><input asp-for="Surname" required/></td>
                     </tr>
                     <tr>
                         <td><label asp-for="Email"></label></td>
-                        <td><input asp-for="Email" /></td>
+                        <td><input asp-for="Email"  required/></td>
                     </tr>
                     <tr>
                         <td><label asp-for="IsEnabled"></label></td>
-                        <td><input asp-for="IsEnabled" /></td>
+                        <td><input asp-for="IsEnabled"/></td>
                     </tr>
 
                 </table>
@@ -100,7 +100,7 @@
                 <table>
                     <tr>
                         <td><label>Nollaa salasana</label></td>
-                        <td><input asp-for="Password" type="password" placeholder="Uusi salasana" /></td>
+                        <td><input asp-for="Password" type="password" placeholder="Uusi salasana" required /></td>
                     </tr>
                 </table>
                 <input asp-for="Username" type="hidden" />
@@ -118,7 +118,6 @@
     
     <div id="myModal" class="modal">
 
-    <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
             
@@ -135,28 +134,20 @@
 @section scripts{
     <script>
 
-        // Get the modal
         var modal = document.getElementById('myModal');
-
-        // Get the button that opens the modal
         var btn = document.getElementById("addUserBtn");
-
-        // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
 
-        // When the user clicks the button, open the modal
         btn.onclick = function () {
             modal.style.display = "block";
 
             $("#createUser").load("/Desite/Desite/AddUser");
         }
 
-        // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
 
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
@@ -164,85 +155,3 @@
         }
     </script>
 }
-
-    @*<div class="adminPanelCon">
-        <div class="adminTools">
-            <ul class="noList gridList">
-                <li>Käyttäjä</li>
-                <li>Enable/Disable</li>
-                <li>Muokkaa</li>
-                <li>Alusta salasana</li>
-            </ul>
-        </div> 
-        <!--Kannasta data loopataan täällä ja tulostetaan käyttäjät-->
-
-        <div id="@item" class="ADuser"><!--Käyttäjän id-->
-            <ul class="noList gridList">
-                <li>@item</li>
-                <li>
-                    @if (Model.IsEnabled)
-                    {
-                        <label>Enabled</label>
-                        <button class="disableUserBtn">Disable</button>
-                    }
-                    else
-                    {
-                        <button class="enableUserBtn">Enable</button>
-                        <label>Disabled</label>
-                    }
-
-                </li>
-                <li><button class="editUserBtn">Muokkaa</button></li>
-                <li><button class="resetPassBtn">Alusta salasana</button></li>
-            </ul>
-
-        </div>
-    
-
-    </div>*@
-
-@*</div>
-
-<!--Shadow jonka päälle avataan popupit-->
-<div class="shadow hidden">
-</div>
-
-<div class="editUserPage hidden popUpPage">
-    <button class="closePopUp">Takaisin</button>
-    <form asp-action="Admin" asp-controller="Desite" method="post">
-        <!--näihin vielä asp-for jossain välis?-->
-        <label>Käyttäjä</label><input type="text" asp-for="Username" /><br />
-        <!--<label>Salasana</label><input type="password" value="" name="ADpass" /><br />
-        <label>Nimi</label><input type="text" value="asd" asp-for="" name="ADname" /><br />-->
-        <label>Sähköposti</label><input type="email" asp-for="Email"/><br />
-        <label>Näytettävä nimi</label><input type="text" asp-for="DisplayName" /><br />
-        <label>Osoite</label><input type="text" asp-for="Path"/><br />
-        <input type="submit" name="editSubmit" value="Tallenna" />
-    </form>
-</div>
-
-<div class="addUserPage hidden popUpPage">
-    <button class="closePopUp">Takaisin</button>
-    <form asp-action="Admin" asp-controller="Desite" method="post">
-        <!--näihin vielä asp-for jossain välis?-->
-        <label>Käyttäjä</label><input type="text" name="ADusername" /><br />
-        <label>Salasana</label><input type="password" value="" name="ADpass" /><br />
-        <label>Salasana</label><input type="password" value="" name="ADpass2" /><br />
-        <label>Nimi</label><input type="text" name="ADname" /><br />
-        <label>Sähköposti</label><input type="email" name="ADemail" /><br />
-        <label>Näytettävä nimi</label><input type="text" name="ADname" /><br />
-        <label>Osoite</label><input type="text" name="ADaddress" /><br />
-        <input type="submit" name="addSubmit" value="Lisää käyttäjä" />
-    </form>
-</div>
-
-
-<div class="resetPassPage hidden popUpPage">
-    <button class="closePopUp">Takaisin</button>
-    <form asp-action="Admin" asp-controller="Desite" method="post">
-        <!--näihin vielä asp-for jossain välis?-->       
-        <label>Salasana</label><input type="password" value="" name="ADpass" /><br />
-        <label>Salasana uudelleen</label><input type="password" value="" name="ADpass2" /><br />
-        <input type="submit" value="Aseta salasana" />
-    </form>
-</div>*@

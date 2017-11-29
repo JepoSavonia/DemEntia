@@ -25,6 +25,4 @@ $(document).ready(function () {
         $(".visiblePopUp").removeClass("visiblePopUp");
     });
 
-
-    if($)
 });
