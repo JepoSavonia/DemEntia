@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using Savonia.AdManagement;
+using DemEntiaHRApplication.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace DemEntiaHRApplication
 {
@@ -26,6 +29,10 @@ namespace DemEntiaHRApplication
             services.Configure<AccountManagementConfig>(Configuration.GetSection("ADConfig"));
 
             services.AddAuthentication(Microsoft.AspNetCore.Server.IISIntegration.IISDefaults.AuthenticationScheme);
+
+            services.AddDbContext<DementiaContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
 
             services.AddMvc();
         }

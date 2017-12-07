@@ -8,25 +8,127 @@ using Savonia.AdManagement;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using System.Net;
+using System.Net.Mail;
+using DemEntiaHRApplication.Data;
+
 //using Savonia.AdManagement;
 
 namespace DemEntiaHRApplication.Controllers
 {
     public class DesiteController : Controller
     {
+
+        private readonly DementiaContext _context;
         private AccountManagementConfig AccountManagementConfig;
         private BetterAdManager adManager;
 
-        public DesiteController(IOptions<AccountManagementConfig> options)
+
+        public DesiteController(IOptions<AccountManagementConfig> options, DementiaContext context)
         {
             AccountManagementConfig = options?.Value;
             adManager = new BetterAdManager(AccountManagementConfig);
+            _context = context;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index(string email)
+        {
+            SavoniaUserObject obj = new SavoniaUserObject();
+
+            obj = adManager.FindUserByEmail(email);
+            if (obj != null)
+            {
+                ViewBag.username = obj.Username;
+                ViewBag.email = obj.Email;
+
+                string token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+                token = token.Replace("+", "");
+                token = token.Replace("/", "");
+                token = token.Replace("=", "");
+                _context.ResetPass.Add(new ResetPass { token = token, email = obj.Email });
+                _context.SaveChanges();
+
+                string resetUlr = "http://localhost:50191/Desite/ResetPassword?token="+token;
+
+
+                var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+                var message = new MailMessage();
+                message.To.Add(new MailAddress(obj.Email));
+                message.Subject = "Testiä";
+                message.From = new MailAddress("mailsender@ALUENIMI3.LOCAL");
+                message.Subject = "Your email subject";
+                message.Body = string.Format(body, "Dementia", "mailsender@aluenimi3.local", "Tällä linkillä pääset vaihtamaan salasanasi: <br/><a href='"+ resetUlr +"'>" + resetUlr + "</a>");
+                message.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient())
+                {
+                    var credentials = new NetworkCredential
+                    {
+                        UserName = "mailsender@ALUENIMI3.LOCAL",
+                        Password = "Salasana123"
+                    };
+
+                    smtp.Credentials = credentials;
+                    smtp.Host = "de-exch1.ALUENIMI3.LOCAL";
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    await smtp.SendMailAsync(message);
+                    
+                }
+
+                
+            }
+
+            ViewBag.error = "Sähköposti lähetetty osoitteeseen " + email;
+            
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            
+            ResetPass userToken = _context.ResetPass.SingleOrDefault(m => m.token == token);
+            return View(userToken);
+        }
+
+        [HttpPost]
+        public IActionResult SetNewPass(string password1, string password2, string email, string token)
+        {
+            if (password1 == password2)
+            {
+                SavoniaUserObject obj = new SavoniaUserObject();
+
+                obj = adManager.FindUserByEmail(email);
+                if (obj != null)
+                {
+                    adManager.ResetPassword(obj.Username, password1);
+
+                    ViewBag.error = "Salasana vaihdettu";
+                    try
+                    {
+                        ResetPass userToken = _context.ResetPass.SingleOrDefault(m => m.token == token);
+                        _context.Remove(userToken);
+                        _context.SaveChanges();
+                    }
+                    catch(Exception ex)
+                    {  }
+                }
+            }
+            else
+            {
+                RedirectToAction("ResetPassword", new { token = token });
+            }
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         [Authorize(Roles ="Aluenimi3.local\\UG_Admin")]
         public IActionResult Admin(string username)
