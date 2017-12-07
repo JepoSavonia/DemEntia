@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Net;
 using System.Net.Mail;
 using DemEntiaHRApplication.Data;
+using System.Linq;
 
 //using Savonia.AdManagement;
 
@@ -161,7 +162,7 @@ namespace DemEntiaHRApplication.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Aluenimi3.local\\UG_Admin")]
-        public IActionResult Admin(SavoniaUserObject userObject, string update, string createUser)
+        public async Task<IActionResult> Admin(SavoniaUserObject userObject, string update, string createUser)
         {
             ViewData["display"] = "block";
             if (update != null)
@@ -175,6 +176,8 @@ namespace DemEntiaHRApplication.Controllers
                 adManager.AddUserToGroup(userObject.Username, "UG_Employee");
 
                 ViewData["message"] = "käyttäjä " + userObject.Username + " lisätty!";
+
+                await TukiEmail(userObject);
 
                 return View();
             }
@@ -247,7 +250,7 @@ namespace DemEntiaHRApplication.Controllers
             return View();
         }
 
-        public IActionResult SaveUsers(string userArray)
+        public async Task<IActionResult> SaveUsers(string userArray)
         {
            
             List<SavoniaUserObject> userList = JsonConvert.DeserializeObject<List<SavoniaUserObject>>(userArray);
@@ -256,9 +259,40 @@ namespace DemEntiaHRApplication.Controllers
             {
                 adManager.AddUser(user);
                 adManager.AddUserToGroup(user.Username, "UG_Employee");
+
+                await TukiEmail(user);
+
             }
 
             return Json(new { success = true, responseText = "Käyttäjät lisätty!" });
+        }
+
+        public async Task TukiEmail(SavoniaUserObject userObject)
+        {
+            var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+            var message = new MailMessage();
+            message.To.Add(new MailAddress("ittuki@aluenimi3.local"));
+            message.Subject = "Uusi käyttäjä";
+            message.From = new MailAddress("mailsender@ALUENIMI3.LOCAL");
+            //message.Subject = "Your email subject";
+            message.Body = string.Format(body, "Dementia", "mailsender@aluenimi3.local", "Uusikäyttäjä: " + userObject.Username);
+            message.IsBodyHtml = true;
+
+            using (var smtp = new SmtpClient())
+            {
+                var credentials = new NetworkCredential
+                {
+                    UserName = "mailsender@ALUENIMI3.LOCAL",
+                    Password = "Salasana123"
+                };
+
+                smtp.Credentials = credentials;
+                smtp.Host = "de-exch1.ALUENIMI3.LOCAL";
+                smtp.Port = 587;
+                smtp.EnableSsl = true;
+                await smtp.SendMailAsync(message);
+
+            }
         }
 
     }

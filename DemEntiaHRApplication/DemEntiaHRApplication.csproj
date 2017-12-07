@@ -43,13 +43,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Users\devnsn\Downloads\AdManagement-adManagement\AdManagement-adManagement\Savonia.AdManagement\Savonia.AdManagement.csproj" />
+    <ProjectReference Include="..\..\..\Savonia.AdManagement\Savonia.AdManagement.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
-    <ProjectReference Include="..\..\..\Savonia.AdManagement\Savonia.AdManagement.csproj" />
   </ItemGroup>
 
 </Project>
