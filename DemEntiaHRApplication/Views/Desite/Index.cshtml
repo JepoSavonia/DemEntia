@@ -5,27 +5,54 @@
 <h1> Login </h1>
 <br />
 <form asp-action="Admin" method="get">
-    <input type="submit" class="adminBtn" name="admin" value="Admin"/>
+    <input type="submit" class="newPass btn btn-primary" name="admin" value="Admin"/>
 </form>
 <br />
 <form asp-action="HRUser" method="get">
-    <input type="submit" class="hrBtn" name="hruser" value="HR-User" />
+    <input type="submit" class="newPass btn btn-info" name="hruser" value="HR-User" />
 </form>
 <br />
 <form asp-action="ADUser" method="get">
-    <input type="submit" class="adBtn" name="aduser" value="AD-User" />
+    <input type="submit" class="newPass btn btn-success" name="aduser" value="AD-User" />
 </form>
 <br />
-<span class="newPass adminBtn">Unohdin salasanani</span>
+<span id="newPass" class="newPass btn btn-link">Unohdin salasanani</span>
 <p>@ViewBag.username</p>
 <p>@ViewBag.email</p>
 <p>@ViewBag.error</p>
+<p>@ViewData["errorMessage"]</p>
 
-<div class="shadow hidden"></div>
-<div class="sendNewPass hidden popUpPage">
-    <span>Syötä sähköpostiosoite: </span>
-    <form asp-controller="Desite" asp-action="Index" method="post">
-        <input type="email" name="email"/>
-        <input type="submit" value="Lähetä"/>
-    </form>
+<div id="modalDiv" class="modal">
+    <div class="modal-content">
+        <span id="closeSpan" class="close">&times;</span>
+        <br />
+        <span class="email-text">Syötä sähköpostiosoite: </span>
+        <form asp-controller="Desite" asp-action="Index" method="post">
+            <input class="form-control" placeholder="Sähköposti" type="email" name="email" required />
+    
+            <input class="btn btn-success" type="submit" value="Lähetä" />
+        </form>
+    </div>
 </div>
+
+@section scripts{
+    <script>
+        var span = document.getElementsByClassName("close")[0];
+        var modal = document.getElementById('modalDiv');
+        var btn = document.getElementById("newPass");
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+</script>
+}

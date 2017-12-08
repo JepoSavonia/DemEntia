@@ -46,6 +46,7 @@ namespace DemEntiaHRApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string email)
         {
+
             SavoniaUserObject obj = new SavoniaUserObject();
 
             obj = adManager.FindUserByEmail(email);
@@ -62,7 +63,6 @@ namespace DemEntiaHRApplication.Controllers
                 _context.SaveChanges();
 
                 string resetUlr = "http://localhost:50191/Desite/ResetPassword?token="+token;
-
 
                 var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
                 var message = new MailMessage();
@@ -88,12 +88,9 @@ namespace DemEntiaHRApplication.Controllers
                     await smtp.SendMailAsync(message);
                     
                 }
-
-                
             }
 
             ViewBag.error = "Sähköposti lähetetty osoitteeseen " + email;
-            
 
             return RedirectToAction("Index");
         }
@@ -125,7 +122,9 @@ namespace DemEntiaHRApplication.Controllers
                         _context.SaveChanges();
                     }
                     catch(Exception ex)
-                    {  }
+                    {
+
+                    }
                 }
             }
             else
@@ -164,7 +163,7 @@ namespace DemEntiaHRApplication.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Aluenimi3.local\\UG_Admin")]
-        public async Task<IActionResult> Admin(SavoniaUserObject userObject, string update, string createUser)
+        public IActionResult Admin(SavoniaUserObject userObject, string update)
         {
             ViewData["display"] = "block";
             String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
@@ -173,24 +172,29 @@ namespace DemEntiaHRApplication.Controllers
                 adManager.UpdateUser(userObject);
                 ViewData["updateMessage"] = "käyttäjä " + userObject.Username + " päivitetty!";
             }
-            else if (createUser != null)
-            {
-                adManager.AddUser(userObject);
-                adManager.AddUserToGroup(userObject.Username, "UG_Employee");
 
-                ViewData["message"] = "käyttäjä " + userObject.Username + " lisätty!";
-
-                await TukiEmail(userObject);
-
-                return View();
-            }
-            
-            return View(new UserModel { User = userObject, AdminUser = adManager.FindUser(adminUser) });
+            return View(new UserModel { User = userObject, AdminUser = adManager.FindAdminUser(adminUser) });
         }
 
-        public IActionResult AddUser()
+        public async Task<IActionResult> CreateUser(SavoniaUserObject CreateUser)
         {
-            return ViewComponent("NewUser");
+            ViewData["display"] = "none";
+            String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
+
+            SavoniaUserObject existingUser = adManager.FindUser(CreateUser.Username);
+            if (existingUser == null)
+            {
+                adManager.AddUser(CreateUser);
+                adManager.AddUserToGroup(CreateUser.Username, "UG_Employee");
+                ViewData["message"] = "käyttäjä " + CreateUser.Username + " lisätty!";
+                await TukiEmail(CreateUser);
+            }
+            else
+            {
+                ViewData["userFoundMessage"] = "Käyttäjänimi on jo olemassa!";
+            }
+
+            return View("Admin",new UserModel { AdminUser = adManager.FindAdminUser(adminUser) });
         }
 
         public IActionResult ResetPass(SavoniaUserObject userObject)
@@ -199,7 +203,7 @@ namespace DemEntiaHRApplication.Controllers
             ViewData["resetPassMessage"] = "Käyttäjän " + userObject.Username + " salasana vaihdettu!";
             userObject.Password = "";
             String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
-            return View("Admin", new UserModel { User = userObject, AdminUser = adManager.FindUser(adminUser) });
+            return View("Admin", new UserModel { User = userObject, AdminUser = adManager.FindAdminUser(adminUser) });
         }
 
         [HttpGet]

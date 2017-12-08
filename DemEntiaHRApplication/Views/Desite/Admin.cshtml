@@ -1,46 +1,4 @@
-﻿<style>
-
-    .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-
-    /* Modal Content */
-    .modal-content {
-        background-color: #fefefe;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 30%;
-    }
-
-    /* The Close Button */
-    .close {
-        color: #aaaaaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-</style>
-
-
-@{
+﻿@{
     ViewData["Title"] = "Admin";
 }
 
@@ -54,7 +12,9 @@
     
     <br />
     <div class="adminAddUserCon">
-        <button id="addUserBtn" type="button" class="adminAddUserBtn" >Lisää käyttäjä</button>
+        <p>@ViewData["message"]</p>
+        <button id="addUserBtn" type="button" class="adminAddUserBtn btn btn-success" >Lisää käyttäjä</button>
+        <p>@ViewData["userFoundMessage"]</p>
     </div>
     <br />
     <div class="searchCon">
@@ -70,8 +30,8 @@
             <form asp-action="Admin" method="post">
                 <table>
                     <tr>
-                        <td><label asp-for="User.Username"></label></td>
-                        <td><input asp-for="User.Username" disabled="disabled"/><input asp-for="User.Username" type="hidden" /></td>
+                        <td><label asp-for="User.Username" ></label></td>
+                        <td><input asp-for="User.Username" class="form-control" disabled="disabled"/><input asp-for="User.Username" type="hidden" /></td>
                     </tr>
 
                     <tr>
@@ -104,7 +64,7 @@
                 <table>
                     <tr>
                         <td><label>Nollaa salasana</label></td>
-                        <td><input asp-for="User.Password" type="password" placeholder="Uusi salasana" required /></td>
+                        <td><input asp-for="User.Password" type="password" placeholder="Uusi salasana" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 10 or more characters" required /></td>
                     </tr>
                 </table>
                 <input asp-for="User.Username" type="hidden" />
@@ -127,34 +87,54 @@
             
             <h3>Lisää uusi käyttäjä</h3>
             <br />
-            <div id="createUser">
-
-            </div>
-
+            <form asp-action="CreateUser" method="post">
+                <table>
+                    <tr>
+                        <td><label asp-for="CreateUser.Username"></label></td>
+                        <td><input asp-for="CreateUser.Username" class="form-control" placeholder="Käyttäjänimi" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label asp-for="CreateUser.Name"></label></td>
+                        <td><input asp-for="CreateUser.Name" class="form-control" placeholder="Etunimi" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label asp-for="CreateUser.Surname"></label></td>
+                        <td><input asp-for="CreateUser.Surname" class="form-control" placeholder="Sukunimi" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label asp-for="CreateUser.IsEnabled"></label></td>
+                        <td><input asp-for="CreateUser.IsEnabled" class="checkbox" /></td>
+                    </tr>
+                    <tr>
+                        <td><label asp-for="CreateUser.Password"></label></td>
+                        <td><input asp-for="CreateUser.Password" class="form-control" placeholder="Salasana" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 10 or more characters" required /></td>
+                    </tr>
+                </table>
+                <br />
+                <p>@ViewData["passwordError"]</p>
+                <input class="btn btn-success" type="submit" name="createUser" value="Lisää käyttäjä" />
+            </form>
         </div>
-
     </div>
 
 @section scripts{
     <script>
 
-        var modal = document.getElementById('myModal');
-        var btn = document.getElementById("addUserBtn");
+        var createUserModal = document.getElementById('myModal');
+        var createBtn = document.getElementById("addUserBtn");
         var span = document.getElementsByClassName("close")[0];
 
-        btn.onclick = function () {
-            modal.style.display = "block";
-
-            $("#createUser").load("/Desite/AddUser");
+        createBtn.onclick = function () {
+            createUserModal.style.display = "block";
         }
 
         span.onclick = function () {
-            modal.style.display = "none";
+            createUserModal.style.display = "none";
         }
 
         window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+            if (event.target == createUserModal) {
+                createUserModal.style.display = "none";
             }
         }
     </script>
