@@ -25,4 +25,16 @@ $(document).ready(function () {
         $(".visiblePopUp").removeClass("visiblePopUp");
     });
 
+
+    $(".newPass").click(function () {
+        $(".shadow").removeClass("hidden");
+        $(".sendNewPass").removeClass("hidden");
+        $(".sendNewPass").addClass("visiblePopUp");
+    });
+
+    $(".shadow").click(function () {
+        $(".shadow").addClass("hidden");
+        $(".visiblePopUp").addClass("hidden");
+        $(".visiblePopUp").removeClass("visiblePopUp");
+    });
 });

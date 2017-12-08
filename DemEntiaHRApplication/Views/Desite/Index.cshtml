@@ -5,13 +5,27 @@
 <h1> Login </h1>
 <br />
 <form asp-action="Admin" method="get">
-    <input type="submit" name="admin" value="Admin"/>
+    <input type="submit" class="adminBtn" name="admin" value="Admin"/>
 </form>
 <br />
 <form asp-action="HRUser" method="get">
-    <input type="submit" name="hruser" value="HR-User" />
+    <input type="submit" class="hrBtn" name="hruser" value="HR-User" />
 </form>
 <br />
 <form asp-action="ADUser" method="get">
-    <input type="submit" name="aduser" value="AD-User" />
+    <input type="submit" class="adBtn" name="aduser" value="AD-User" />
 </form>
+<br />
+<span class="newPass adminBtn">Unohdin salasanani</span>
+<p>@ViewBag.username</p>
+<p>@ViewBag.email</p>
+<p>@ViewBag.error</p>
+
+<div class="shadow hidden"></div>
+<div class="sendNewPass hidden popUpPage">
+    <span>Syötä sähköpostiosoite: </span>
+    <form asp-controller="Desite" asp-action="Index" method="post">
+        <input type="email" name="email"/>
+        <input type="submit" value="Lähetä"/>
+    </form>
+</div>
