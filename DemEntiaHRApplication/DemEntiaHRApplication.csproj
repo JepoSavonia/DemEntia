@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Users\devnsn\Downloads\AdManagement-adManagement\AdManagement-adManagement\Savonia.AdManagement\Savonia.AdManagement.csproj" />
+    <ProjectReference Include="..\..\AdManagement\Savonia.AdManagement\Savonia.AdManagement.csproj" />
   </ItemGroup>
 
   <ItemGroup>

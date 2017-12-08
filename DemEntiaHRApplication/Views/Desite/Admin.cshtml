@@ -43,11 +43,14 @@
     ViewData["Title"] = "Admin";
 }
 
-@model Savonia.AdManagement.SavoniaUserObject
+@model UserModel
 <h2>Ylläpitäjä</h2>
 
     <br />
-    <p>@ViewData["message"]</p>
+    @*<p>@ViewData["message"]</p>
+    <p>Nimi : @Model.AdminUser.DisplayName</p>
+    <p>Sähköposti : @Model.AdminUser.Email</p>*@
+    
     <br />
     <div class="adminAddUserCon">
         <button id="addUserBtn" type="button" class="adminAddUserBtn" >Lisää käyttäjä</button>
@@ -66,26 +69,26 @@
             <form asp-action="Admin" method="post">
                 <table>
                     <tr>
-                        <td><label asp-for="Username"></label></td>
-                        <td><input asp-for="Username" disabled="disabled"/><input asp-for="Username" type="hidden" /></td>
+                        <td><label asp-for="User.Username"></label></td>
+                        <td><input asp-for="User.Username" disabled="disabled"/><input asp-for="User.Username" type="hidden" /></td>
                     </tr>
 
                     <tr>
-                        <td><label asp-for="Name"></label></td>
-                        <td><input asp-for="Name" required/></td>
+                        <td><label asp-for="User.Name"></label></td>
+                        <td><input asp-for="User.Name" required/></td>
                     </tr>
 
                     <tr>
-                        <td><label asp-for="Surname"></label></td>
-                        <td><input asp-for="Surname" required/></td>
+                        <td><label asp-for="User.Surname"></label></td>
+                        <td><input asp-for="User.Surname" required/></td>
                     </tr>
                     <tr>
-                        <td><label asp-for="Email"></label></td>
-                        <td><input asp-for="Email"  required/></td>
+                        <td><label asp-for="User.Email"></label></td>
+                        <td><input asp-for="User.Email" disabled="disabled" required/></td>
                     </tr>
                     <tr>
-                        <td><label asp-for="IsEnabled"></label></td>
-                        <td><input asp-for="IsEnabled"/></td>
+                        <td><label asp-for="User.IsEnabled"></label></td>
+                        <td><input asp-for="User.IsEnabled"/></td>
                     </tr>
 
                 </table>
@@ -100,14 +103,14 @@
                 <table>
                     <tr>
                         <td><label>Nollaa salasana</label></td>
-                        <td><input asp-for="Password" type="password" placeholder="Uusi salasana" required /></td>
+                        <td><input asp-for="User.Password" type="password" placeholder="Uusi salasana" required /></td>
                     </tr>
                 </table>
-                <input asp-for="Username" type="hidden" />
-                <input asp-for="Name" type="hidden" />
-                <input asp-for="Surname" type="hidden" />
-                <input asp-for="Email" type="hidden" />
-                <input asp-for="IsEnabled" type="hidden" />
+                <input asp-for="User.Username" type="hidden" />
+                <input asp-for="User.Name" type="hidden" />
+                <input asp-for="User.Surname" type="hidden" />
+                <input asp-for="User.Email" type="hidden" />
+                <input asp-for="User.IsEnabled" type="hidden" />
                 <input type="submit" name="resetPass" value="Tallenna" />
             </form>
             <br />
@@ -141,7 +144,7 @@
         btn.onclick = function () {
             modal.style.display = "block";
 
-            $("#createUser").load("/Desite/Desite/AddUser");
+            $("#createUser").load("/Desite/AddUser");
         }
 
         span.onclick = function () {

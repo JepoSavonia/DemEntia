@@ -10,5 +10,6 @@ namespace DemEntiaHRApplication.Models
     {
         public IEnumerable<SavoniaUserObject> UserList { get; set; }
         public SavoniaUserObject User { get; set; }
+        public SavoniaUserObject AdminUser { get; set; }
     }
 }

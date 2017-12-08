@@ -30,11 +30,13 @@ namespace DemEntiaHRApplication.Controllers
         {
             return View();
         }
+
         [HttpGet]
         [Authorize(Roles ="Aluenimi3.local\\UG_Admin")]
         public IActionResult Admin(string username)
         {
             String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
+            
             ViewData["message"] = "Tervetuloa " + adminUser;
             if (username != null)
             {
@@ -49,10 +51,11 @@ namespace DemEntiaHRApplication.Controllers
                     ViewData["userNotFound"] = "Käyttäjää ei löytynyt!";
                     ViewData["display"] = "none";
                 }
-                return View(userObject);
+                return View(new UserModel { User = userObject, AdminUser = adManager.FindUser(adminUser) });
             }
             ViewData["display"] = "none";
-            return View();
+            var admin = adManager.FindUser(adminUser);
+            return View(new UserModel { AdminUser = admin });
         }
 
         [HttpPost]
@@ -60,6 +63,7 @@ namespace DemEntiaHRApplication.Controllers
         public IActionResult Admin(SavoniaUserObject userObject, string update, string createUser)
         {
             ViewData["display"] = "block";
+            String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
             if (update != null)
             {
                 adManager.UpdateUser(userObject);
@@ -72,10 +76,11 @@ namespace DemEntiaHRApplication.Controllers
 
                 ViewData["message"] = "käyttäjä " + userObject.Username + " lisätty!";
 
-                return View();
+                
+                return View(new UserModel {AdminUser= adManager.FindUser(adminUser)});
             }
             
-            return View(userObject);
+            return View(new UserModel { User = userObject, AdminUser = adManager.FindUser(adminUser) });
         }
 
         public IActionResult AddUser()
@@ -88,7 +93,8 @@ namespace DemEntiaHRApplication.Controllers
             adManager.ResetPassword(userObject.Username, userObject.Password);
             ViewData["resetPassMessage"] = "Käyttäjän " + userObject.Username + " salasana vaihdettu!";
             userObject.Password = "";
-            return View("Admin", userObject);
+            String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
+            return View("Admin", new UserModel { User = userObject, AdminUser = adManager.FindUser(adminUser) });
         }
 
         [HttpGet]
