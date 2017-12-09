@@ -9,7 +9,7 @@ namespace DemEntiaHRApplication.Models
     public class UserModel
     {
         public IEnumerable<SavoniaUserObject> UserList { get; set; }
-        public SavoniaUserObject User { get; set; }
+        public SavoniaUserObject UserObject { get; set; }
         public SavoniaUserObject AdminUser { get; set; }
         public SavoniaUserObject CreateUser { get; set; }
     }

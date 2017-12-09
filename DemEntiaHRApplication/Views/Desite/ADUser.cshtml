@@ -2,43 +2,44 @@
     ViewData["Title"] = "ADUser";
 }
 
-@using Savonia.AdManagement
-
-@model SavoniaUserObject
+@model UserModel
 
 <h2>ADUser</h2>
 <br />
-<h4>@ViewData["message"]</h4>
+
+<p>Käyttäjänimi : @Model.UserObject.Username</p>
+<p>Nimi : @Model.UserObject.DisplayName</p>
+<p>Sähköposti : @Model.UserObject.Email</p>
+<p>Title : @Model.UserObject.Title</p>
+
+<p>@ViewData["updateError"]</p>
+
+<p>@ViewData["message"]</p>
+
 <br />
-<form asp-action="ADUser" method="post">
+<form asp-action="UpdateADUser" method="post">
 
     <table>
         <tr>
-            <td><label asp-for="Name"></label></td>
-            <td><input asp-for="Name" /></td>
+            <td><label asp-for="UserObject.Username"></label></td>
+            <td><input class="form-control" asp-for="UserObject.Username" required /></td>
         </tr>
         <tr>
-            <td><label asp-for="Surname"></label></td>
-            <td><input asp-for="Surname" /></td>
+            <td><label asp-for="UserObject.Name"></label></td>
+            <td><input class="form-control" asp-for="UserObject.Name" required/></td>
         </tr>
         <tr>
-            <td><label asp-for="Email"></label></td>
-            <td><input asp-for="Email" /></td>
+            <td><label asp-for="UserObject.Surname"></label></td>
+            <td><input class="form-control" asp-for="UserObject.Surname" required/></td>
         </tr>
+
         <tr>
-            <td><label asp-for="DisplayName"></label></td>
-            <td><input asp-for="DisplayName" /></td>
+            <td><label asp-for="UserObject.Title"></label></td>
+            <td><input class="form-control" asp-for="UserObject.Title" required/></td>
         </tr>
-        <!--<tr>
-            <td><label asp-for="Address"></label></td>
-            <td><input asp-for="Address" /></td>
-        </tr>
+
         <tr>
-            <td><label asp-for="Nimi"></label></td>
-            <td><input asp-for="Nimi" /></td>
-        </tr>-->
-        <tr>
-            <td><input type="submit" name="save" value="tallenna" /></td>
+            <td><input class="btn btn-success" type="submit" value="Tallenna" /></td>
         </tr>
 
     </table>

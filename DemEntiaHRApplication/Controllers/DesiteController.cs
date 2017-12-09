@@ -139,8 +139,7 @@ namespace DemEntiaHRApplication.Controllers
         public IActionResult Admin(string username)
         {
             String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
-            
-            ViewData["message"] = "Tervetuloa " + adminUser;
+
             if (username != null)
             {
                 SavoniaUserObject userObject = new SavoniaUserObject();
@@ -154,26 +153,38 @@ namespace DemEntiaHRApplication.Controllers
                     ViewData["userNotFound"] = "Käyttäjää ei löytynyt!";
                     ViewData["display"] = "none";
                 }
-                return View(new UserModel { User = userObject, AdminUser = adManager.FindUser(adminUser) });
+                return View(new UserModel { UserObject = userObject, AdminUser = adManager.FindAdminUser(adminUser) });
             }
             ViewData["display"] = "none";
-            var admin = adManager.FindUser(adminUser);
-            return View(new UserModel { AdminUser = admin });
+
+            return View(new UserModel { AdminUser = adManager.FindAdminUser(adminUser) });
         }
 
         [HttpPost]
         [Authorize(Roles = "Aluenimi3.local\\UG_Admin")]
-        public IActionResult Admin(SavoniaUserObject userObject, string update)
+        public IActionResult Admin(SavoniaUserObject UserObject, string update)
         {
             ViewData["display"] = "block";
             String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
             if (update != null)
             {
-                adManager.UpdateUser(userObject);
-                ViewData["updateMessage"] = "käyttäjä " + userObject.Username + " päivitetty!";
+                adManager.UpdateUser(UserObject);
+                ViewData["updateMessage"] = "käyttäjä " + UserObject.Username + " päivitetty!";
             }
 
-            return View(new UserModel { User = userObject, AdminUser = adManager.FindAdminUser(adminUser) });
+            return View(new UserModel { UserObject = UserObject, AdminUser = adManager.FindAdminUser(adminUser) });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Aluenimi3.local\\UG_Admin")]
+        public IActionResult UpdateAdmin(SavoniaUserObject AdminUser)
+        {
+            ViewData["display"] = "none";
+
+            adManager.UpdateAdminUser(AdminUser);
+            ViewData["message"] = "Käyttäjä " + AdminUser.Username + " päivitetty!";
+
+            return View("Admin", new UserModel { AdminUser = adManager.FindAdminUser(AdminUser.Username) });
         }
 
         public async Task<IActionResult> CreateUser(SavoniaUserObject CreateUser)
@@ -197,13 +208,13 @@ namespace DemEntiaHRApplication.Controllers
             return View("Admin",new UserModel { AdminUser = adManager.FindAdminUser(adminUser) });
         }
 
-        public IActionResult ResetPass(SavoniaUserObject userObject)
+        public IActionResult ResetPass(SavoniaUserObject UserObject)
         {
-            adManager.ResetPassword(userObject.Username, userObject.Password);
-            ViewData["resetPassMessage"] = "Käyttäjän " + userObject.Username + " salasana vaihdettu!";
-            userObject.Password = "";
+            adManager.ResetPassword(UserObject.Username, UserObject.Password);
+            ViewData["resetPassMessage"] = "Käyttäjän " + UserObject.Username + " salasana vaihdettu!";
+            UserObject.Password = "";
             String adminUser = User.Identity.Name.Replace("ALUENIMI3\\", "");
-            return View("Admin", new UserModel { User = userObject, AdminUser = adManager.FindAdminUser(adminUser) });
+            return View("Admin", new UserModel { UserObject = UserObject, AdminUser = adManager.FindAdminUser(adminUser) });
         }
 
         [HttpGet]
@@ -214,8 +225,8 @@ namespace DemEntiaHRApplication.Controllers
             String userName = User.Identity.Name.Replace("ALUENIMI3\\", "");
             userObject = adManager.FindUser(userName);
             userObject.Username = userName;
-            ViewData["message"] = "Tervetuloa " + userName;
-            return View(userObject);
+
+            return View(new UserModel { UserObject = userObject });
         }
 
         [HttpPost]
@@ -225,10 +236,11 @@ namespace DemEntiaHRApplication.Controllers
             userObject.Username = User.Identity.Name.Replace("ALUENIMI3\\", "");
             adManager.UpdateUser(userObject);
             ViewData["message"] = "Käyttäjän " + userObject.Username + " tiedot päivitetty";
-            return View(userObject);
+            return View(new UserModel { UserObject = userObject });
         }
 
         [HttpPost]
+        [Authorize(Roles = "Aluenimi3.local\\UG_HR")]
         public IActionResult PostFile(IFormFile postedFile)
         {
 
@@ -242,10 +254,33 @@ namespace DemEntiaHRApplication.Controllers
                 var line = reader.ReadLine();
                 var values = line.Split(';');
 
-                results.Add(new SavoniaUserObject {Name = values[0], Surname=values[1], Username=values[2], Email=values[3], Password=values[4], IsEnabled=Boolean.Parse(values[5]) });
+                results.Add(new SavoniaUserObject {Name = values[0], Surname=values[1], Username=values[2], Title=values[3], Password=values[4], IsEnabled=Boolean.Parse(values[5]) });
             }
+            String userName = User.Identity.Name.Replace("ALUENIMI3\\", "");
+            SavoniaUserObject userObject = adManager.FindUser(userName);
+            return View("HRUser", new UserModel { UserList = results, UserObject = userObject });
+        }
 
-            return View("HRUser", new UserModel { UserList = results });
+        [Authorize(Roles = "Aluenimi3.local\\UG_HR")]
+        public IActionResult UpdateUser(SavoniaUserObject UserObject)
+        {
+            UserObject.IsEnabled = true;
+            adManager.UpdateUser(UserObject);
+            ViewData["message"] = "Käyttäjä " + UserObject.Username + " päivitetty!";
+
+            SavoniaUserObject updatedUser = adManager.FindUser(UserObject.Username);
+            return View("HRUser", new UserModel { UserObject = updatedUser });
+        }
+
+        [Authorize(Roles = "Aluenimi3.local\\UG_Employee")]
+        public IActionResult UpdateADUser(SavoniaUserObject UserObject)
+        {
+            UserObject.IsEnabled = true;
+            adManager.UpdateUser(UserObject);
+            ViewData["message"] = "Käyttäjä " + UserObject.Username + " päivitetty!";
+
+            SavoniaUserObject updatedUser = adManager.FindUser(UserObject.Username);
+            return View("ADUser", new UserModel { UserObject = updatedUser });
         }
 
         [Authorize(Roles = "Aluenimi3.local\\UG_HR")]
@@ -255,7 +290,7 @@ namespace DemEntiaHRApplication.Controllers
             String userName = User.Identity.Name.Replace("ALUENIMI3\\", "");
             userObject = adManager.FindUser(userName);
 
-            return View();
+            return View(new UserModel { UserObject = userObject });
         }
 
         public async Task<IActionResult> SaveUsers(string userArray)

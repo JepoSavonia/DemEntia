@@ -6,9 +6,14 @@
 <h2>Ylläpitäjä</h2>
 
     <br />
-    @*<p>@ViewData["message"]</p>
+    <p>Käyttäjänimi : @Model.AdminUser.Username</p>
     <p>Nimi : @Model.AdminUser.DisplayName</p>
-    <p>Sähköposti : @Model.AdminUser.Email</p>*@
+    <p>Sähköposti : @Model.AdminUser.Email</p>
+    <p>Title : @Model.AdminUser.Title</p>
+    <div class="edit-div">
+        <p>@ViewData["updateError"]</p>
+        <button id="editBtn" class="btn btn-link">Muokkaa</button>
+    </div>
     
     <br />
     <div class="adminAddUserCon">
@@ -20,8 +25,8 @@
     <div class="searchCon">
         <form asp-action="Admin" method="get">
 
-            <input type="text" name="username" placeholder="Username" />
-            <input id="searchButton" type="submit" value="Hae" />
+            <input class="form-control newPass" type="text" name="username" placeholder="Käyttäjänimi" required style="display:inline-block;"/>
+            <input id="searchButton" class="btn btn-success" type="submit" value="Hae" style="display:inline-block;"/>
             <br />
         </form>
         <p style="color:red">@ViewData["userNotFound"]</p>
@@ -30,30 +35,30 @@
             <form asp-action="Admin" method="post">
                 <table>
                     <tr>
-                        <td><label asp-for="User.Username" ></label></td>
-                        <td><input asp-for="User.Username" class="form-control" disabled="disabled"/><input asp-for="User.Username" type="hidden" /></td>
+                        <td><label asp-for="UserObject.Username" ></label></td>
+                        <td><input asp-for="UserObject.Username" class="form-control"/><input asp-for="UserObject.Username" type="hidden" /></td>
                     </tr>
 
                     <tr>
-                        <td><label asp-for="User.Name"></label></td>
-                        <td><input asp-for="User.Name" required/></td>
+                        <td><label asp-for="UserObject.Name"></label></td>
+                        <td><input asp-for="UserObject.Name" class="form-control" required/></td>
                     </tr>
 
                     <tr>
-                        <td><label asp-for="User.Surname"></label></td>
-                        <td><input asp-for="User.Surname" required/></td>
+                        <td><label asp-for="UserObject.Surname"></label></td>
+                        <td><input asp-for="UserObject.Surname" class="form-control" required/></td>
                     </tr>
                     <tr>
-                        <td><label asp-for="User.Email"></label></td>
-                        <td><input asp-for="User.Email" disabled="disabled" required/></td>
+                        <td><label asp-for="UserObject.Title"></label></td>
+                        <td><input asp-for="UserObject.Title" class="form-control" required/></td>
                     </tr>
                     <tr>
-                        <td><label asp-for="User.IsEnabled"></label></td>
-                        <td><input asp-for="User.IsEnabled"/></td>
+                        <td><label asp-for="UserObject.IsEnabled"></label></td>
+                        <td><input asp-for="UserObject.IsEnabled"/></td>
                     </tr>
 
                 </table>
-                <input type="submit" name="update" value="Päivitä" />
+                <input class="btn btn-success" type="submit" name="update" value="Päivitä" />
             </form>
             <br />
 
@@ -64,15 +69,15 @@
                 <table>
                     <tr>
                         <td><label>Nollaa salasana</label></td>
-                        <td><input asp-for="User.Password" type="password" placeholder="Uusi salasana" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 10 or more characters" required /></td>
+                        <td><input class="form-control" asp-for="UserObject.Password" type="password" placeholder="Uusi salasana" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 10 or more characters" required /></td>
                     </tr>
                 </table>
-                <input asp-for="User.Username" type="hidden" />
-                <input asp-for="User.Name" type="hidden" />
-                <input asp-for="User.Surname" type="hidden" />
-                <input asp-for="User.Email" type="hidden" />
-                <input asp-for="User.IsEnabled" type="hidden" />
-                <input type="submit" name="resetPass" value="Tallenna" />
+                <input asp-for="UserObject.Username" type="hidden" />
+                <input asp-for="UserObject.Name" type="hidden" />
+                <input asp-for="UserObject.Surname" type="hidden" />
+                <input asp-for="UserObject.Title" type="hidden" />
+                <input asp-for="UserObject.IsEnabled" type="hidden" />
+                <input class="btn btn-success" type="submit" name="resetPass" value="Tallenna" />
             </form>
             <br />
             <p>@ViewData["resetPassMessage"]</p>
@@ -117,6 +122,31 @@
         </div>
     </div>
 
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+
+            <h3>Muokkaa käyttäjää</h3>
+            <br />
+
+            <form asp-action="UpdateAdmin" method="post">
+                <label asp-for="AdminUser.Username"></label>
+                <input asp-for="AdminUser.Username" class="form-control" />
+
+                <label asp-for="AdminUser.Name"></label>
+                <input asp-for="AdminUser.Name" class="form-control" />
+
+                <label asp-for="AdminUser.Surname"></label>
+                <input asp-for="AdminUser.Surname" class="form-control" />
+
+                <label asp-for="AdminUser.Title"></label>
+                <input asp-for="AdminUser.Title" class="form-control" />
+
+                <input type="submit" class="btn btn-success" value="Tallenna"/>
+            </form>
+        </div>
+    </div>
+
 @section scripts{
     <script>
 
@@ -134,8 +164,26 @@
 
         window.onclick = function (event) {
             if (event.target == createUserModal) {
+
                 createUserModal.style.display = "none";
+
+            }else if (event.target == editAdminUserModal) {
+
+                editAdminUserModal.style.display = "none";
+
             }
+        }
+
+        var editAdminUserModal = document.getElementById('editModal');
+        var editBtn = document.getElementById("editBtn");
+        var span2 = document.getElementsByClassName("close")[1];
+
+        editBtn.onclick = function () {
+            editAdminUserModal.style.display = "block";
+        }
+
+        span2.onclick = function () {
+            editAdminUserModal.style.display = "none";
         }
     </script>
 }

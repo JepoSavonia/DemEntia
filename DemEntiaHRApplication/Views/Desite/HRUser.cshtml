@@ -4,30 +4,66 @@
 }
 @model UserModel
 <h2>HRUser</h2>
+<br />
 
+<p>Käyttäjänimi : @Model.UserObject.Username</p>
+    <p>Nimi : @Model.UserObject.DisplayName</p>
+    <p>Sähköposti : @Model.UserObject.Email</p>
+    <p>Title : @Model.UserObject.Title</p>
+    <div class="edit-div">
+        <p>@ViewData["updateError"]</p>
+        <button id="editBtn" class="btn btn-link">Muokkaa</button>
+    </div>
+    <p>@ViewData["message"]</p>
+<br />
 <form method="post" enctype="multipart/form-data" asp-action="PostFile">
 
-    <input id="uploadFile" placeholder="Valitse tiedosto" disabled="disabled" />
+    <input id="uploadFile" class="form-control newPass" placeholder="Valitse tiedosto" disabled="disabled" style="display:inline-block;"/>
 
-    <button class="upload" type="button" onclick="document.getElementById('uploadBtn').click();">Hae</button>
+    <button class="upload btn btn-success" type="button" onclick="document.getElementById('uploadBtn').click();" style="display:inline-block;">Hae</button>
 
-    <input id="uploadBtn" type="file" name="postedFile" style="visibility:hidden;" />
+    <input id="uploadBtn" type="file" name="postedFile" style="visibility:hidden;" required/>
 
-    <input type="submit" value="Lataa tiedosto" />
+    <input class="btn btn-success" type="submit" value="Lataa tiedosto"/>
 
 </form>
 
-@if (Model != null)
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <h3>Muokkaa käyttäjää</h3>
+        <br />
+
+        <form asp-action="UpdateUser" method="post">
+            <label asp-for="UserObject.Username"></label>
+            <input asp-for="UserObject.Username" class="form-control" />
+
+            <label asp-for="UserObject.Name"></label>
+            <input asp-for="UserObject.Name" class="form-control" />
+
+            <label asp-for="UserObject.Surname"></label>
+            <input asp-for="UserObject.Surname" class="form-control" />
+
+            <label asp-for="UserObject.Title"></label>
+            <input asp-for="UserObject.Title" class="form-control" />
+
+            <input type="submit" class="btn btn-success" value="Tallenna" />
+        </form>
+    </div>
+</div>
+
+@if (Model != null && Model.UserList != null)
 {
         <table class="table">
             <thead>
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.User.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.User.Surname)</th>
-                    <th>@Html.DisplayNameFor(model => model.User.Username)</th>
-                    <th>@Html.DisplayNameFor(model => model.User.Email)</th>
-                    <th>@Html.DisplayNameFor(model => model.User.Password)</th>
-                    <th>@Html.DisplayNameFor(model => model.User.IsEnabled)</th>
+                    <th>@Html.DisplayNameFor(model => model.UserObject.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.UserObject.Surname)</th>
+                    <th>@Html.DisplayNameFor(model => model.UserObject.Username)</th>
+                    <th>@Html.DisplayNameFor(model => model.UserObject.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.UserObject.Password)</th>
+                    <th>@Html.DisplayNameFor(model => model.UserObject.IsEnabled)</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,8 +84,8 @@
                             @Html.DisplayFor(modelItem => user.Username)
                         </td>
                         <td>
-                            @Html.HiddenFor(x => user.Email)
-                            @Html.DisplayFor(modelItem => user.Email)
+                            @Html.HiddenFor(x => user.Title)
+                            @Html.DisplayFor(modelItem => user.Title)
                         </td>
                         <td>
                             @Html.HiddenFor(x => user.Password)
@@ -65,7 +101,7 @@
             </tbody>
         </table>
 
-        <button name="saveUsers" onclick="saveUsers()">Tallenna käyttäjät</button>
+        <button class="btn btn-success" name="saveUsers" onclick="saveUsers()">Tallenna käyttäjät</button>
 }
 
 @{
@@ -89,7 +125,7 @@
             $.ajax({
                 dataType: 'json',
                 type: 'POST',
-                url: '/Desite/Desite/SaveUsers',
+                url: '/Desite/SaveUsers',
                 data: { userArray: JSON.stringify(userArray) },
                 success: function (result) {
                     alert(result.responseText);
@@ -110,6 +146,25 @@
         document.getElementById("uploadFile").value = filename;
     };
 
+    var editUserModal = document.getElementById('editModal');
+    var editBtn = document.getElementById("editBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    editBtn.onclick = function () {
+        editUserModal.style.display = "block";
+    }
+
+    span.onclick = function () {
+        editUserModal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == editUserModal) {
+
+            editUserModal.style.display = "none";
+
+        }
+    }
 </script>
 
 }
